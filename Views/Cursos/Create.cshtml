@@ -1,0 +1,115 @@
+﻿@model FiltroSeguridad.Models.Cursos
+
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/css/starrr.css" rel="stylesheet" />
+<script src="~/js/starrr.js"></script>
+<script>
+    let ranking = 0;
+    const guardarCurso = () => {
+        var requestData = {
+            Nombre: $('#name').val(),
+            Descripcion: $('#description').val(),
+            Precio: $('#price').val(),
+            ImgURL: $('#imgURL').val(),
+            Ranking: ranking,
+           
+        }
+
+        if (requestData.Nombre == "" || requestData.Descripcion == "" || requestData.Precio == "" || requestData.ImgURL == "" || requestData.Ranking == "") {
+            return Swal.fire({
+                title: '¡Error!',
+                text: 'Ningún campo puede ser vacío',
+                icon: 'error',
+                confirmButtonText: 'Cool'
+            })
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "https://localhost:44320/Cursos/Create",
+            data: requestData,
+            success: function (data) {
+                Swal.fire({
+                    title: '¡Listo!',
+                    text: 'Curso guardado con éxito',
+                    icon: 'success'
+                });
+                setTimeout(() => {
+                    window.location.href = "https://localhost:44320/Cursos/Index";
+                }, 3000);
+            }
+        });
+
+    }
+</script>
+<header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: mediumpurple">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#" style="color: white; font-size: 25px">Filtro Seguridad</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a style="color: white" class="nav-link active" aria-current="page" href="https://localhost:44320/Cursos/Index">Cursos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a style="color: white" class="nav-link active" aria-current="page" href="https://localhost:44320/Roles/Index">Roles</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
+<body style="background-image: url('https://source.unsplash.com/featured/1080x720'); background-size: cover; background-repeat: no-repeat; ">
+    <div class="card" style="width: 33.3rem; margin-left: 370px; margin-top: 1rem; background-color: rgba(0, 0, 0, 0.5); color: white">
+        <div class="card-body">
+            <h3 class="card-title" style="font-weight: bold">Crear Curso</h3>
+            <div style="margin-top: 30px; margin-bottom: 20px">
+                <label for="name">Nombre</label>
+                <input style="width: 500px" , type="text" , id="name" , class="form-control" , placeholder="Escribe el nombre del curso aquí" />
+            </div>
+            <div style="margin-top: 5px; margin-bottom: 20px">
+                <label for="description">Descripción</label>
+                <input style="width: 500px" , type="text" , id="description" , Class="form-control" , placeholder="Escribe la descripción del curso aquí" />
+            </div>
+            <div style="margin-top: 30px; margin-bottom: 20px">
+                <label for="price">Precio</label>
+                <input style="width: 500px" , type="number" , id="price" , class="form-control" />
+            </div>
+            <div style="margin-top: 5px; margin-bottom: 20px">
+                <label for="imgURL">URL de Imagen</label>
+                <input style="width: 500px" , type="text" , id="imgURL" , Class="form-control" , placeholder="Escribe la url de imagen del curso aquí" />
+            </div>
+            <div style="margin-top: 30px; margin-bottom: 20px">
+                <label for="ranking">Calificación</label>
+                <div id="ranking"></div>
+            </div>
+            
+            <button onclick="guardarCurso()" class="btn" style="background-color: #FB7945; color: white">Guardar</button>
+            <a href="https://localhost:44320/cursos/index" class="btn btn-primary" style="color: white; margin-left: 1rem">Cancelar</a>
+        </div>
+    </div>
+    <script>
+        $('#ranking').starrr({
+            rating: 0,
+            change: (ev, value) => {
+                ranking = value;
+            }
+        });
+    </script>
+</body>
